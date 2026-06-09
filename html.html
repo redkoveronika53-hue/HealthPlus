@@ -1,0 +1,621 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Здоровье плюс | Поликлиника в Оренбурге</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background: #eff5fa;
+            color: #1a4c66;
+            line-height: 1.45;
+        }
+
+        /* Header в светлых тонах */
+        .site-header {
+            background: #ffffff;
+            border-bottom: 1px solid #d0e2ed;
+            padding: 1rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.96);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-img {
+            height: 56px;
+            width: auto;
+            border-radius: 16px;
+            background: #ecf5fa;
+            padding: 4px;
+            object-fit: contain;
+        }
+
+        .brand-name {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            color: #22668b;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 550;
+            font-size: 1rem;
+            color: #2a688a;
+            transition: 0.2s;
+            padding: 0.3rem 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #1b6d96;
+            border-bottom-color: #2E7DAA;
+        }
+
+        .main-container {
+            max-width: 1280px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page {
+            display: none;
+            animation: fadeSlide 0.3s ease;
+        }
+
+        .active-page {
+            display: block;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        /* карточки и блоки */
+        .light-card {
+            background: #ffffff;
+            border-radius: 1.8rem;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(46, 125, 170, 0.05);
+            border: 1px solid #ddeef6;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .info-block {
+            background: white;
+            border-radius: 1.6rem;
+            padding: 1.4rem 1.6rem;
+            border: 1px solid #dfecf3;
+        }
+
+        .info-block h3 {
+            font-weight: 650;
+            color: #1f698e;
+            margin-bottom: 0.7rem;
+            font-size: 1.35rem;
+        }
+
+        /* сетка направлений с popup-описанием при наведении */
+        .specialties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.8rem;
+            margin: 1.8rem 0;
+        }
+
+        .specialty-card {
+            background: white;
+            border-radius: 1.4rem;
+            padding: 1.2rem 1.2rem;
+            border-left: 5px solid #2E7DAA;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+            transition: all 0.25s ease;
+            cursor: default;
+            position: relative;
+        }
+
+        .specialty-card h4 {
+            font-weight: 700;
+            color: #1e6082;
+            font-size: 1.25rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .specialty-short-desc {
+            font-size: 0.9rem;
+            color: #2c5b75;
+        }
+
+        /* Всплывающее окно (popup) при наведении */
+        .specialty-card .popup-detail {
+            visibility: hidden;
+            opacity: 0;
+            background-color: #ffffff;
+            color: #1e3b4c;
+            width: 280px;
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1rem 1.2rem;
+            position: absolute;
+            z-index: 120;
+            bottom: 115%;
+            left: 0;
+            box-shadow: 0 18px 30px -8px rgba(0, 32, 64, 0.2);
+            border: 1px solid #cde0ec;
+            transition: opacity 0.2s ease, visibility 0.2s;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            pointer-events: none;
+            backdrop-filter: blur(2px);
+        }
+
+        .specialty-card:hover .popup-detail {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .specialty-card .popup-detail::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: #cde0ec transparent transparent transparent;
+        }
+
+        .specialty-card .popup-detail::before {
+            content: '';
+            position: absolute;
+            top: calc(100% - 1px);
+            left: 20px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: white transparent transparent transparent;
+            z-index: 2;
+        }
+
+        .contact-row {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #e2eef5;
+        }
+
+        .btn-primary {
+            background: #2E7DAA;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 3rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #22668b;
+            transform: translateY(-1px);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.75rem 1.2rem;
+            border-radius: 2rem;
+            border: 1px solid #cde0ea;
+            background: #ffffff;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #2E7DAA;
+            box-shadow: 0 0 0 3px rgba(46,125,170,0.08);
+        }
+        textarea {
+            border-radius: 1.4rem;
+            resize: vertical;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.8rem;
+            font-size: 0.8rem;
+            color: #4f7c96;
+            border-top: 1px solid #deeef5;
+            background: #ffffff;
+            margin-top: 2rem;
+        }
+
+        .badge-light {
+            background: #eaf2f8;
+            padding: 0.3rem 0.9rem;
+            border-radius: 2rem;
+            display: inline-block;
+            margin: 0.2rem;
+            font-size: 0.8rem;
+            color: #1f6d92;
+        }
+
+        .map-container {
+            margin-top: 1rem;
+            border-radius: 1.6rem;
+            overflow: hidden;
+            border: 1px solid #d4e4ed;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+        }
+
+        iframe {
+            width: 100%;
+            height: 380px;
+            display: block;
+            border: none;
+        }
+
+        @media (max-width: 760px) {
+            .site-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .main-container {
+                padding: 0 1.2rem;
+            }
+            .specialty-card .popup-detail {
+                width: 260px;
+                left: -10px;
+            }
+            iframe {
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="brand">
+        <img class="logo-img" src="https://s10.iimage.su/s/02/th_gBgKrRSxZRLyzkf57ii8YGBsU7h0JQCw57Je6Qdz9.jpg" alt="Логотип Здоровье плюс" onerror="this.style.display='none'">
+        <span class="brand-name">Здоровье плюс</span>
+    </div>
+    <div class="nav-links">
+        <a href="#" data-page="home" class="active">Главная</a>
+        <a href="#" data-page="about">О центре</a>
+        <a href="#" data-page="services">Услуги</a>
+        <a href="#" data-page="contacts">Контакты</a>
+    </div>
+</header>
+
+<div class="main-container">
+    <!-- ГЛАВНАЯ СТРАНИЦА с направлениями + всплывающие описания -->
+    <div id="home" class="page active-page">
+        <div class="light-card">
+            <h1 style="font-size: 2.2rem; font-weight: 650; color: #1b6083;">Поликлиника Здоровье плюс</h1>
+            <p style="font-size: 1.2rem; color: #2e6f92; margin: 0.5rem 0 1rem 0;">Современная амбулаторная помощь в Оренбурге</p>
+            <p>Лицензированный медицинский центр (с 2016 года). Взрослое и детское отделения, работа по ОМС, ДМС и на коммерческой основе. Опытные врачи, собственная лаборатория, цифровая запись.</p>
+            <div style="background: #e9f3f9; border-radius: 1.4rem; padding: 1rem 1.5rem; margin-top: 1.8rem;">
+                <strong>Адрес:</strong> г. Оренбург, ул. Терешковой, 140/1<br>
+                <strong>Телефон:</strong> +7 (3532) 12-34-56<br>
+                <strong>Режим работы:</strong> ПН–ПТ 08:00 – 20:00 · СБ 09:00 – 15:00 · ВС выходной
+            </div>
+        </div>
+
+        <div style="margin: 2rem 0 0.5rem 0;">
+            <h2 style="font-weight: 650; color: #1c5e80;">Ключевые направления</h2>
+            <p style="color: #2b6d92;">Наведите курсор на карточку, чтобы увидеть подробное описание</p>
+        </div>
+
+        <!-- СПИСОК НАПРАВЛЕНИЙ С POPUP-ОПИСАНИЯМИ -->
+        <div class="specialties-grid">
+            <div class="specialty-card">
+                <h4>Терапия</h4>
+                <div class="specialty-short-desc">Первичный приём, лечение хронических болезней, диспансеризация.</div>
+                <div class="popup-detail">
+                    <strong>Терапия — подробнее</strong><br>
+                    Консультация терапевта, диагностика ОРВИ, бронхитов, гипертонии, болезней ЖКТ. Выдача больничных листов, справок, направление на анализы. Диспансерное наблюдение пациентов с хроническими патологиями.
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Педиатрия</h4>
+                <div class="specialty-short-desc">Приём детей, вакцинация, патронаж новорождённых.</div>
+                <div class="popup-detail">
+                    <strong>Педиатрия — детальное описание</strong><br>
+                    Осмотр педиатра с рождения до 18 лет, вакцинация по календарю, лечение инфекций, вызов на дом. Контроль физического и нервно-психического развития, оформление справок в детские сады и школы.
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Кардиология</h4>
+                <div class="specialty-short-desc">ЭКГ, лечение гипертонии, аритмий, сердечной недостаточности.</div>
+                <div class="popup-detail">
+                    <strong>Кардиологическая помощь</strong><br>
+                    Диагностика и лечение артериальной гипертензии, ишемической болезни, аритмий. Проведение ЭКГ, холтеровского мониторирования ЭКГ и АД. Подбор гипотензивной и антиаритмической терапии.
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Неврология</h4>
+                <div class="specialty-short-desc">Мигрень, боли в спине, реабилитация после инсульта.</div>
+                <div class="popup-detail">
+                    <strong>Неврологическая помощь</strong><br>
+                    Лечение головных болей, вертеброгенных болей, вегетососудистой дистонии, невропатий. Восстановление после инсультов, ЧМТ. Медикаментозная коррекция, физиотерапия (по показаниям).
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Эндокринология</h4>
+                <div class="specialty-short-desc">Сахарный диабет, патологии щитовидной железы.</div>
+                <div class="popup-detail">
+                    <strong>Эндокринологическая поддержка</strong><br>
+                    Диагностика и лечение сахарного диабета, заболеваний щитовидной железы (гипотиреоз, узлы), метаболического синдрома. Контроль гормонального профиля, подбор диеты и терапии.
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Офтальмология</h4>
+                <div class="specialty-short-desc">Проверка зрения, подбор очков, лечение глазных болезней.</div>
+                <div class="popup-detail">
+                    <strong>Офтальмологический приём</strong><br>
+                    Оценка остроты зрения, рефрактометрия, подбор очков. Лечение конъюнктивитов, синдрома сухого глаза, ранних стадий катаракты. Тонометрия (измерение внутриглазного давления) для исключения глаукомы.
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>ЛОР (оториноларингология)</h4>
+                <div class="specialty-short-desc">Лечение отитов, гайморитов, удаление серных пробок.</div>
+                <div class="popup-detail">
+                    <strong>ЛОР-помощь</strong><br>
+                    Диагностика и терапия ринитов, синуситов, фарингитов, тонзиллитов, отитов. Промывание миндалин, удаление серных пробок, аудиометрия. Консультации при аденоидах у детей.
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Хирургия</h4>
+                <div class="specialty-short-desc">Амбулаторная хирургия: удаление новообразований, перевязки.</div>
+                <div class="popup-detail">
+                    <strong>Амбулаторная хирургия</strong><br>
+                    Удаление папиллом, липом, кондилом, обработка ран, перевязки, предоперационное обследование. Консультации при грыжах, варикозной болезни.
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Гинекология</h4>
+                <div class="specialty-short-desc">Осмотр, лечение воспалений, ведение беременных.</div>
+                <div class="popup-detail">
+                    <strong>Гинекологическая помощь</strong><br>
+                    Профилактические осмотры, диагностика инфекций, воспалительных заболеваний, нарушений цикла. Кольпоскопия, подбор контрацепции, ведение беременности (амбулаторно).
+                </div>
+            </div>
+            <div class="specialty-card">
+                <h4>Урология</h4>
+                <div class="specialty-short-desc">Циститы, простатиты, инфекции мочевыводящих путей.</div>
+                <div class="popup-detail">
+                    <strong>Урологическая помощь</strong><br>
+                    Лечение циститов, простатитов, мочекаменной болезни, инфекций мочевыводящих путей. Консультации по возрастным изменениям, назначение терапии.
+                </div>
+            </div>
+        </div>
+
+        <div class="light-card" style="margin-top: 0.8rem;">
+            <h3 style="font-weight: 650;">Дополнительные услуги</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem;">
+                <span class="badge-light">Лабораторные анализы</span>
+                <span class="badge-light">УЗИ (брюшная полость, щитовидная железа)</span>
+                <span class="badge-light">ЭКГ</span>
+                <span class="badge-light">Справки для ГИБДД / бассейна</span>
+                <span class="badge-light">Санаторно-курортные карты</span>
+                <span class="badge-light">Медицинские книжки</span>
+                <span class="badge-light">Предрейсовые осмотры</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА О КОМПАНИИ -->
+    <div id="about" class="page">
+        <div class="light-card">
+            <h2 style="font-weight: 650;">О медицинском центре</h2>
+            <p style="margin-top: 0.5rem;">Поликлиника «Здоровье плюс» (ООО «Здоровье плюс») основана в 2016 году в городе Оренбурге. Учреждение имеет бессрочную лицензию на медицинскую деятельность (№ Л041-01185-56/00345678).</p>
+            <p style="margin-top: 0.8rem;">В штате — 22 врача высшей и первой категорий, средний медицинский персонал. Главный врач — Редько Вероника Вячеславовна. Ежегодно принимаем более 12 000 пациентов. Внедрена электронная медицинская карта, онлайн-запись и телемедицина.</p>
+            <hr style="margin: 1.2rem 0; border: 0; border-top: 1px solid #daeaf2;">
+            <h3 style="font-weight: 650;">Лицензирование и качество</h3>
+            <p>Лицензия включает терапию, педиатрию, кардиологию, неврологию, хирургию, лабораторную диагностику. Регулярные проверки Росздравнадзора, соблюдение санитарных норм, внутренний контроль качества.</p>
+            <h3 style="font-weight: 650; margin-top: 1.2rem;">Врачебная тайна и защита данных</h3>
+            <p>Информация о состоянии здоровья строго конфиденциальна (ст.13 №323-ФЗ). Передача данных третьим лицам — только с письменного согласия пациента. Все сотрудники подписывают обязательства о неразглашении.</p>
+            <h3 style="font-weight: 650; margin-top: 1.2rem;">Транспортная доступность</h3>
+            <p>Остановка «Нефтяников» в 200 метрах от входа. Автобусы: 17, 21, 33, 39, 41, 51, 59, 61, 32, 158; троллейбусы 4, 6. Имеется парковка, пандус для маломобильных групп.</p>
+        </div>
+        <div class="grid-2">
+            <div class="info-block">
+                <h3>Трудовые отношения</h3>
+                <p>Все сотрудники оформлены по ТК РФ. Проводятся обязательные предварительные и периодические медосмотры (приказ №29н). Ежегодное повышение квалификации врачей.</p>
+            </div>
+            <div class="info-block">
+                <h3>Запись и сервисы</h3>
+                <p>Запись через портал Госуслуг, по телефону или через форму на сайте. Для льготных категорий — отдельные окна и приоритетный приём.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА УСЛУГИ -->
+    <div id="services" class="page">
+        <div class="light-card">
+            <h2 style="font-weight: 650;">Все услуги поликлиники</h2>
+            <p>Полный цикл амбулаторной помощи — от профилактики до сложной диагностики</p>
+        </div>
+        <div class="grid-2">
+            <div class="info-block">
+                <h3>Лечебно-диагностические услуги</h3>
+                <ul style="margin-top: 0.5rem; list-style: none; padding-left: 0;">
+                    <li style="padding: 0.2rem 0;">- Приём терапевта, педиатра, кардиолога, невролога, эндокринолога</li>
+                    <li style="padding: 0.2rem 0;">- Консультации офтальмолога, ЛОР, хирурга, гинеколога, уролога</li>
+                    <li style="padding: 0.2rem 0;">- ЭКГ, холтеровское мониторирование, УЗИ</li>
+                    <li style="padding: 0.2rem 0;">- Лабораторные исследования: общий анализ крови, биохимия, гормоны</li>
+                </ul>
+            </div>
+            <div class="info-block">
+                <h3>Профилактика и справки</h3>
+                <ul style="margin-top: 0.5rem; list-style: none; padding-left: 0;">
+                    <li style="padding: 0.2rem 0;">- Диспансеризация и профосмотры</li>
+                    <li style="padding: 0.2rem 0;">- Вакцинация (грипп, гепатит, корь)</li>
+                    <li style="padding: 0.2rem 0;">- Справки для ГИБДД, бассейна, оружия, поступления</li>
+                    <li style="padding: 0.2rem 0;">- Санаторно-курортные карты, больничные листы</li>
+                </ul>
+            </div>
+        </div>
+        <div class="light-card" style="margin-top: 0.5rem;">
+            <p style="font-weight: 500;">Платные услуги и ДМС</p>
+            <p>Обслуживание по договорам добровольного медицинского страхования. Прейскурант на платные услуги доступен в регистратуре и на ресепшене.</p>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА КОНТАКТЫ + ОБРАТНАЯ СВЯЗЬ + КАРТА -->
+    <div id="contacts" class="page">
+        <div class="grid-2" style="margin-bottom: 1.5rem;">
+            <div class="info-block">
+                <h3>Контакты и реквизиты</h3>
+                <div class="contact-row"><strong>Телефон регистратуры:</strong> +7 (3532) 12-34-56</div>
+                <div class="contact-row"><strong>Горячая линия (запись, вызов на дом):</strong> 8 (900) 20-57-730</div>
+                <div class="contact-row"><strong>E-mail:</strong> info@zdorovie-plus56.ru</div>
+                <div class="contact-row"><strong>Сайт:</strong> zdorovie-plus-med.ru</div>
+                <div class="contact-row"><strong>Адрес:</strong> г. Оренбург, ул. Терешковой, 140/1</div>
+                <div class="contact-row"><strong>Остановка «Нефтяников»:</strong> автобусы 17,21,33,39,41,51,59,61,32,158; троллейбусы 4,6</div>
+                <div class="badge-light" style="margin-top: 12px;">ПН–ПТ 08:00 – 20:00 · СБ 09:00 – 15:00 · ВС выходной</div>
+            </div>
+            <div class="info-block">
+                <h3>Обратная связь</h3>
+                <form id="feedbackForm" action="https://formsubmit.co/info@zdorovie-plus56.ru" method="POST">
+                    <input type="hidden" name="_subject" value="Сообщение с сайта Здоровье плюс">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://zdorovie-plus-med.ru/thanks.html">
+                    <input type="text" name="ФИО" placeholder="Ваше имя" required style="margin-bottom: 0.8rem;">
+                    <input type="email" name="Email" placeholder="Электронная почта" required style="margin-bottom: 0.8rem;">
+                    <input type="tel" name="Телефон" placeholder="Контактный телефон" style="margin-bottom: 0.8rem;">
+                    <textarea name="Сообщение" rows="4" placeholder="Задайте вопрос, запишитесь на приём или оставьте отзыв" required style="margin-bottom: 1rem;"></textarea>
+                    <button type="submit" class="btn-primary">Отправить сообщение</button>
+                    <p style="font-size: 0.7rem; margin-top: 10px;">Нажимая кнопку, вы даёте согласие на обработку персональных данных. Ответ будет направлен в рабочее время.</p>
+                </form>
+            </div>
+        </div>
+
+        <!-- Карта Яндекса с адресом -->
+        <div class="light-card" style="margin-bottom: 1rem;">
+            <h3 style="font-weight: 650; margin-bottom: 0.75rem;">Как нас найти</h3>
+            <div class="map-container">
+                <iframe 
+                    src="https://yandex.ru/map-widget/v1/?ll=55.038891,51.843560&z=16&pt=55.038891,51.843560&text=Оренбург%2C%20улица%20Терешковой%2C%20140%2F1" 
+                    width="100%" height="380" frameborder="0" allowfullscreen="true">
+                </iframe>
+            </div>
+            <p style="margin-top: 0.8rem; font-size: 0.85rem; color: #2e6f92;">Точный адрес: г. Оренбург, ул. Терешковой, дом 140/1. Клиника расположена в шаговой доступности от остановки «Нефтяников».</p>
+        </div>
+
+        <div class="light-card">
+            <h3 style="font-weight: 650;">Важная информация</h3>
+            <p>При себе необходимо иметь паспорт и полис ОМС (для планового приёма). При вызове врача на дом — документы пациента. Приём неотложных состояний без предварительной записи.</p>
+            <p style="margin-top: 0.6rem;">Лицензия № Л041-01185-56/00345678 от 15.03.2016. Соблюдение врачебной тайны и требований к защите персональных данных гарантировано.</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 Поликлиника «Здоровье плюс» — лицензированная медицинская помощь в Оренбурге</p>
+    <p style="margin-top: 0.2rem;">Все права защищены · Онлайн-запись 24/7 · Бесплатный колл-центр</p>
+</footer>
+
+<script>
+    const pages = {
+        home: document.getElementById('home'),
+        about: document.getElementById('about'),
+        services: document.getElementById('services'),
+        contacts: document.getElementById('contacts')
+    };
+    const navLinks = document.querySelectorAll('[data-page]');
+
+    function setActivePage(pageId) {
+        Object.keys(pages).forEach(id => {
+            pages[id].classList.remove('active-page');
+        });
+        if (pages[pageId]) pages[pageId].classList.add('active-page');
+        navLinks.forEach(link => {
+            const target = link.getAttribute('data-page');
+            if (target === pageId) link.classList.add('active');
+            else link.classList.remove('active');
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-page');
+            if (pageId && pages[pageId]) {
+                setActivePage(pageId);
+                history.pushState({ page: pageId }, '', `#${pageId}`);
+            }
+        });
+    });
+
+    window.addEventListener('popstate', () => {
+        const hash = window.location.hash.slice(1);
+        if (hash && pages[hash]) setActivePage(hash);
+        else setActivePage('home');
+    });
+
+    const startHash = window.location.hash.slice(1);
+    if (startHash && pages[startHash]) setActivePage(startHash);
+    else setActivePage('home');
+
+    // Обработка формы обратной связи — показываем окошко при успехе
+    const feedbackForm = document.getElementById('feedbackForm');
+    if (feedbackForm) {
+        feedbackForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(feedbackForm);
+            fetch(feedbackForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Благодарим за обращение! Ваше сообщение успешно отправлено. Наш специалист свяжется с вами в ближайшее время.');
+                    feedbackForm.reset();
+                } else {
+                    alert('Произошла ошибка при отправке. Пожалуйста, попробуйте ещё раз или позвоните по телефону.');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Не удалось отправить сообщение. Проверьте подключение к интернету или позвоните нам.');
+            });
+        });
+    }
+</script>
+</body>
+</html>
